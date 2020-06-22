@@ -2,6 +2,13 @@
     "name": "kirshin/smsru",
     "description": "send sms from sms.ru",
     "type": "library",
+    "keywords": [
+        "sms",
+        "sms.ru",
+        "smsru",
+        "send sms"
+    ],
+    "homepage": "https://kirshin.pro/",
     "license": "MIT",
     "authors": [
         {
