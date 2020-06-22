@@ -1,0 +1,9 @@
+# project folders
+vendor/
+.idea/
+
+# project files
+composer.lock
+*.iml
+out
+gen
