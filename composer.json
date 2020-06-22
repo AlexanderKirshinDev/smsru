@@ -1,0 +1,25 @@
+{
+    "name": "kirshin/smsru",
+    "description": "send sms from sms.ru",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alexander Kirshin",
+            "email": "alexander.kirshin.dev@gmail.com"
+        }
+    ],
+    "require": {
+        "ext-curl": "*",
+        "ext-json": "*"
+    },
+    "require-dev": {},
+    "autoload": {
+        "psr-4": {"Kirshin\\": "src/"}
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    }
+}
