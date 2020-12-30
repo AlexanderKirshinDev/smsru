@@ -1,9 +1,7 @@
 # project folders
-vendor/
 .idea/
+vendor/
 
 # project files
 composer.lock
 *.iml
-out
-gen
