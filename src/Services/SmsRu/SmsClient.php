@@ -1,22 +1,25 @@
 <?php
 
 
-namespace Kirshin\Services;
+namespace Kirshin\Services\SmsRu;
 
+
+use JsonException;
 
 class SmsClient
 {
-    private $baseUri;
-    private $apiId;
-    private $phone;
-    private $message;
-    private $body;
-    private $data;
-    private $balance;
-    private $ch;
-    public $json;
-    public $statusCode;
-    public $statusText;
+    private string $apiId;
+    private string $baseUri;
+    private string $message;
+    private array $data;
+    private mixed $phone;
+    private mixed $balance;
+    private mixed $body;
+    private mixed $ch;
+
+    public mixed $json;
+    public mixed $statusCode;
+    public mixed $statusText;
 
     /**
      * SmsClient constructor.
@@ -30,10 +33,12 @@ class SmsClient
     }
 
     /**
-     * @param string $phone
+     * @param mixed $phone
      * @param string $message
+     * @throws JsonException
      */
-    public function sendSms (string $phone, string $message) {
+    public function sendSms (mixed $phone, string $message): void
+    {
         $this->setPhone($phone);
         $this->setMessage($message);
 
@@ -46,8 +51,10 @@ class SmsClient
 
     /**
      * build message
+     * @throws JsonException
      */
-    private function build () {
+    private function build (): void
+    {
         $this->ch = curl_init($this->baseUri);
 
         curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, 1);
@@ -65,7 +72,7 @@ class SmsClient
 
         curl_close($this->ch);
 
-        $this->json = json_decode($this->body, false);
+        $this->json = json_decode($this->body, false, 512, JSON_THROW_ON_ERROR);
 
         if ($this->json && $this->json->status === 'OK') {
             foreach ($this->json->sms as $phone => $data) {
@@ -96,7 +103,7 @@ class SmsClient
     /**
      * @param string $apiId
      */
-    public function setApiId($apiId)
+    public function setApiId(string $apiId): void
     {
         $this->apiId = $apiId;
     }
@@ -104,7 +111,7 @@ class SmsClient
     /**
      * @param string $baseUri
      */
-    public function setBaseUri($baseUri)
+    public function setBaseUri(string $baseUri): void
     {
         $this->baseUri = $baseUri;
     }
@@ -112,15 +119,15 @@ class SmsClient
     /**
      * @param mixed $phone
      */
-    public function setPhone($phone)
+    public function setPhone(mixed $phone): void
     {
         $this->phone = explode(',', $phone);
     }
 
     /**
-     * @param mixed $message
+     * @param string $message
      */
-    public function setMessage($message)
+    public function setMessage(string $message): void
     {
         $this->message = $message;
     }
@@ -128,7 +135,7 @@ class SmsClient
     /**
      * @param array $data
      */
-    public function setData($data = [])
+    public function setData(array $data = []): void
     {
         $this->data = $data;
     }
@@ -136,7 +143,7 @@ class SmsClient
     /**
      * @return mixed
      */
-    public function getBalance()
+    public function getBalance(): mixed
     {
         return $this->balance;
     }
@@ -144,7 +151,7 @@ class SmsClient
     /**
      * @param mixed $balance
      */
-    public function setBalance($balance)
+    public function setBalance(mixed $balance): void
     {
         $this->balance = $balance;
     }
@@ -152,7 +159,7 @@ class SmsClient
     /**
      * @return mixed
      */
-    public function getStatusCode()
+    public function getStatusCode(): mixed
     {
         return $this->statusCode;
     }
@@ -160,7 +167,7 @@ class SmsClient
     /**
      * @param mixed $statusCode
      */
-    public function setStatusCode($statusCode)
+    public function setStatusCode(mixed $statusCode): void
     {
         $this->statusCode = $statusCode;
     }
@@ -168,7 +175,7 @@ class SmsClient
     /**
      * @return mixed
      */
-    public function getStatusText()
+    public function getStatusText(): mixed
     {
         return $this->statusText;
     }
@@ -176,9 +183,8 @@ class SmsClient
     /**
      * @param mixed $statusText
      */
-    public function setStatusText($statusText)
+    public function setStatusText(mixed $statusText): void
     {
         $this->statusText = $statusText;
     }
-
 }
