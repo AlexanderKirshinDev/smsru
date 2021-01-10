@@ -8,6 +8,7 @@ use JsonException;
 
 class SmsClient
 {
+    private int $partnerId = 277296;
     private string $apiId;
     private string $baseUri;
     private string $message;
@@ -64,6 +65,7 @@ class SmsClient
                 [
                     'multi' => $this->data['multi'],
                     'api_id' => $this->apiId,
+                    'partner_id' => $this->partnerId,
                     'json' => 1
                 ]
             ));
