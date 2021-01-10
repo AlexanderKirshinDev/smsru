@@ -11,7 +11,9 @@ class SmsClient
     private int $partnerId = 277296;
     private string $apiId;
     private string $baseUri;
+    private string $from;
     private string $message;
+    private array $buildQuery;
     private array $data;
     private mixed $phone;
     private mixed $balance;
@@ -35,11 +37,16 @@ class SmsClient
 
     /**
      * @param mixed $phone
+     * @param string|null $from
      * @param string $message
      * @throws JsonException
      */
-    public function sendSms (mixed $phone, string $message): void
+    public function sendSms (mixed $phone, string $message, string $from = null): void
     {
+        if (isset($from)) {
+            $this->setFrom($from);
+        }
+
         $this->setPhone($phone);
         $this->setMessage($message);
 
@@ -58,17 +65,20 @@ class SmsClient
     {
         $this->ch = curl_init($this->baseUri);
 
+        $this->buildQuery = [
+            'multi' => $this->data['multi'],
+            'api_id' => $this->apiId,
+            'partner_id' => $this->partnerId,
+            'json' => 1
+        ];
+
+        if ($this->from !== null) {
+            $this->buildQuery['from'] = $this->from;
+        }
+
         curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($this->ch, CURLOPT_TIMEOUT, 30);
-        curl_setopt($this->ch, CURLOPT_POSTFIELDS,
-            http_build_query(
-                [
-                    'multi' => $this->data['multi'],
-                    'api_id' => $this->apiId,
-                    'partner_id' => $this->partnerId,
-                    'json' => 1
-                ]
-            ));
+        curl_setopt($this->ch, CURLOPT_POSTFIELDS, http_build_query($this->buildQuery));
 
         $this->body = curl_exec($this->ch);
 
@@ -116,6 +126,14 @@ class SmsClient
     public function setBaseUri(string $baseUri): void
     {
         $this->baseUri = $baseUri;
+    }
+
+    /**
+     * @param string $from
+     */
+    public function setFrom(string $from): void
+    {
+        $this->from = $from;
     }
 
     /**
